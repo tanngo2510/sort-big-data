@@ -6,6 +6,7 @@
 #include <algorithm>
 using namespace std;
 
+
 void printVector(vector<string> &v)
 {
     for (int i = 0; i < v.size(); i++)
@@ -13,6 +14,8 @@ void printVector(vector<string> &v)
         cout << v[i] << "\n";
     }
 }
+
+
 int main()
 {
     ifstream file("test.csv",ios::binary);
@@ -28,7 +31,6 @@ int main()
     {
         file2 << v[i] << "\n";
     }
-    cout<<v[1];
     file.close();
     file2.close();
     return 0;
