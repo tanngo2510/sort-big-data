@@ -7,7 +7,7 @@
 
 #define PATH_CSV_TEST "..\\test.csv"
 #define PATH_CSV "..\\Books_rating.csv"
-#define SIZE 1000
+#define SIZE 10000
 
 using namespace std;
 
@@ -121,7 +121,7 @@ int SplitFile(string path)
     return countFile;
 }
 
-void Merge(vector<Review> review, int left, int right)
+void Merge(vector<Review> &review, int left, int right)
 {
     int middle = (left + right) / 2;
 
@@ -174,7 +174,7 @@ void Merge(vector<Review> review, int left, int right)
     }
 }
 
-void MergeSort(vector<Review> review, int left, int right)
+void MergeSort(vector<Review> &review, int left, int right)
 {
     if (left >= right)
         return;
