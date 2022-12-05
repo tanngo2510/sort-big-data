@@ -7,7 +7,7 @@
 
 #define PATH_CSV_TEST "..\\test.csv"
 #define PATH_CSV "..\\Books_rating.csv"
-#define SIZE 1500
+#define SIZE 1000
 
 using namespace std;
 
@@ -16,15 +16,15 @@ class Review
 private:
     string line;
     string id;
-    string title;
-    string price;
-    string userId;
-    string profileName;
-    string reviewHelpfulness;
-    string reviewScore;
-    string reviewTime;
-    string reviewSummary;
-    string reviewText;
+    // string title;
+    // string price;
+    // string userId;
+    // string profileName;
+    // string reviewHelpfulness;
+    // string reviewScore;
+    // string reviewTime;
+    // string reviewSummary;
+    // string reviewText;
 
 public:
     Review(string text)
@@ -38,15 +38,15 @@ public:
             tokens.push_back(token);
         }
         this->id = tokens[0];
-        this->title = tokens[1];
-        this->price = tokens[2];
-        this->userId = tokens[3];
-        this->profileName = tokens[4];
-        this->reviewHelpfulness = tokens[5];
-        this->reviewScore = tokens[6];
-        this->reviewTime = tokens[7];
-        this->reviewSummary = tokens[8];
-        this->reviewText = tokens[9];
+        // this->title = tokens[1];
+        // this->price = tokens[2];
+        // this->userId = tokens[3];
+        // this->profileName = tokens[4];
+        // this->reviewHelpfulness = tokens[5];
+        // this->reviewScore = tokens[6];
+        // this->reviewTime = tokens[7];
+        // this->reviewSummary = tokens[8];
+        // this->reviewText = tokens[9];
     }
     string GetId()
     {
@@ -222,7 +222,46 @@ void SortFile(int count)
         }
         OutFile.close();
     }
+    string cmd = "del ..\\output";
+    system(cmd.c_str());
 }
+
+// class MergeClass
+// {
+// private:
+//     string filename;
+//     Review *review;
+
+// public:
+//     MergeClass(string filename)
+//     {
+//         this->filename = filename;
+//         fstream file;
+//         file.open(filename, ios_base::in | ios_base::binary);
+//         if (!file.is_open())
+//         {
+//             cout << "Error opening file" << endl;
+//             exit(1);
+//         }
+//         string line;
+//         getline(file, line);
+//         this->review = new Review(line);
+//     }
+//     string getId()
+//     {
+//         return review->GetId();
+//     }
+// };
+
+// void combine(int count){
+//     vector<MergeClass> m;
+//     for (int i = 1; i <= count; i++)
+//     {
+//         m.push_back(MergeClass("..\\sorted\\file" + to_string(i) + ".csv"));
+//     }
+//     MergeClass min = m.front();
+
+// }
 
 int main()
 {
