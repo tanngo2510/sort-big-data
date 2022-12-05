@@ -5,7 +5,7 @@
 #include <sstream>
 #include <sys/stat.h>
 
-#define PATH_CSV_TEST "test.csv"
+#define PATH_CSV_TEST "..\\test.csv"
 #define PATH_CSV "..\\Books_rating.csv"
 #define SIZE 10000
 
@@ -222,7 +222,7 @@ void SortFile(int count)
         }
         OutFile.close();
     }
-    string cmd = "del ..\\output";
+    string cmd = "rmdir /s /q ..\\output";
     system(cmd.c_str());
 }
 

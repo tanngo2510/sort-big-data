@@ -30,3 +30,10 @@
 *.exe
 *.out
 *.app
+
+Books_rating.csv
+test.csv
+bin/*
+output/*
+sorted/*
+.vscode/*
