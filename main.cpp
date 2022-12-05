@@ -7,7 +7,7 @@
 
 #define PATH_CSV_TEST "..\\test.csv"
 #define PATH_CSV "..\\Books_rating.csv"
-#define SIZE 2000
+#define SIZE 1500
 
 using namespace std;
 
@@ -184,16 +184,14 @@ void MergeSort(vector<Review> review, int left, int right)
     Merge(review, left, right);
 }
 
-int main()
+void SortFile(int count)
 {
-    int countFile = SplitFile(PATH_CSV_TEST);
-    cout << "Number of file: " << countFile << endl;
     if (!isDirExist("..\\sorted"))
     {
         string cmd = "mkdir ..\\sorted";
         system(cmd.c_str());
     }
-    for (int f = 0; f < countFile; f++)
+    for (int f = 1; f <= count; f++)
     {
         cout << " Sorting file " << f << "\r";
         vector<Review> review;
@@ -224,5 +222,12 @@ int main()
         }
         OutFile.close();
     }
+}
+
+int main()
+{
+    int count = SplitFile(PATH_CSV_TEST);
+    cout << "Number of file: " << count << endl;
+    SortFile(count);
     return 0;
 }
