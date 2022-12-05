@@ -7,13 +7,14 @@
 
 #define PATH_CSV_TEST "..\\test.csv"
 #define PATH_CSV "..\\Books_rating.csv"
-#define SIZE 1000
+#define SIZE 5000
 
 using namespace std;
 
 class Review
 {
 private:
+    string line;
     string id;
     string title;
     string price;
@@ -28,6 +29,7 @@ private:
 public:
     Review(string text)
     {
+        this->line = text;
         stringstream ss(text);
         string token;
         vector<string> tokens;
@@ -50,10 +52,9 @@ public:
     {
         return id;
     }
-    string GetData()
+    string GetLine()
     {
-        string str = id + "," + title + "," + price + "," + userId + "," + profileName + "," + reviewHelpfulness + "," + reviewScore + "," + reviewTime + "," + reviewSummary + "," + reviewText;
-        return str;
+        return this->line;
     }
 };
 
@@ -68,8 +69,9 @@ bool isDirExist(string path)
         return false;
 }
 
-void SplitFile(string path)
+int SplitFile(string path)
 {
+    int countFile = 0;
     fstream InFile;
     InFile.open(path, ios_base::in | ios_base::binary);
     if (!InFile.is_open())
@@ -83,7 +85,7 @@ void SplitFile(string path)
     int fileCount = 0;
     if (!isDirExist("..\\output"))
     {
-        string cmd = "mkdir --force ..\\output";
+        string cmd = "mkdir ..\\output";
         system(cmd.c_str());
     }
     string fileName = "..\\output\\file" + to_string(fileCount) + ".csv";
@@ -99,6 +101,7 @@ void SplitFile(string path)
     {
         if (count == SIZE)
         {
+            countFile++;
             OutFile.close();
             fileCount++;
             fileName = "..\\output\\file" + to_string(fileCount) + ".csv";
@@ -115,6 +118,7 @@ void SplitFile(string path)
     }
     OutFile.close();
     InFile.close();
+    return countFile;
 }
 
 void Merge(vector<Review> review, int left, int right)
@@ -182,40 +186,43 @@ void MergeSort(vector<Review> review, int left, int right)
 
 int main()
 {
-    SplitFile(PATH_CSV_TEST);
-    cout << "Split file success" << endl;
-    vector<Review> review;
-    fstream InFile;
-    InFile.open("..\\output\\file0.csv", ios_base::in | ios_base::binary);
-    if (!InFile.is_open())
+    int countFile = SplitFile(PATH_CSV_TEST);
+    cout << "Number of file: " << countFile << endl;
+    if (!isDirExist("..\\sorted"))
     {
-        cout << "Error opening InFile" << endl;
-        exit(1);
+        string cmd = "mkdir ..\\sorted";
+        system(cmd.c_str());
     }
-    cout << "Open file0.csv success" << endl;
-    string line;
-    while (getline(InFile, line))
+    for (int f = 0; f <= countFile; f++)
     {
-        review.push_back(Review(line));
+        cout << " Sorting file " << f << "\r";
+        vector<Review> review;
+        fstream InFile;
+        InFile.open("..\\output\\file" + to_string(f) + ".csv", ios_base::in | ios_base::binary);
+        if (!InFile.is_open())
+        {
+            cout << "Error opening InFile" << endl;
+            exit(1);
+        }
+        string line;
+        while (getline(InFile, line))
+        {
+            review.push_back(Review(line));
+        }
+        InFile.close();
+        MergeSort(review, 0, review.size() - 1);
+        fstream OutFile;
+        OutFile.open("..\\sorted\\file" + to_string(f) + ".csv", ios_base::out | ios_base::binary);
+        if (!OutFile.is_open())
+        {
+            cout << "Error opening OutFile" << endl;
+            exit(1);
+        }
+        for (int i = 0; i < review.size(); i++)
+        {
+            OutFile << review.at(i).GetLine() << endl;
+        }
+        OutFile.close();
     }
-    InFile.close();
-    cout << "Read file0.csv success" << endl;
-    cout << "Review size: " << review.size() << endl;
-    MergeSort(review, 0, review.size() - 1);
-    cout << "Merge sort success" << endl;
-    fstream OutFile;
-    OutFile.open("..\\sorted\\file0.csv", ios_base::out | ios_base::binary);
-    if (!OutFile.is_open())
-    {
-        cout << "Error opening OutFile" << endl;
-        exit(1);
-    }
-    cout << "Open file0.csv success" << endl;
-    for (int i = 0; i < review.size(); i++)
-    {
-        OutFile << review.at(i).GetData() << endl;
-    }
-    OutFile.close();
-    cout << "Write file0.csv success" << endl;
     return 0;
 }
