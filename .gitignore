@@ -34,3 +34,4 @@ Books_rating.csv
 bin/*
 output/*
 sorted/*
+.vscode/*

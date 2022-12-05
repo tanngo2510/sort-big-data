@@ -7,7 +7,7 @@
 
 #define PATH_CSV_TEST "..\\test.csv"
 #define PATH_CSV "..\\Books_rating.csv"
-#define SIZE 5000
+#define SIZE 2000
 
 using namespace std;
 
@@ -82,7 +82,7 @@ int SplitFile(string path)
     string header;
     string line;
     int count = 0;
-    int fileCount = 0;
+    int fileCount = 1;
     if (!isDirExist("..\\output"))
     {
         string cmd = "mkdir ..\\output";
@@ -193,7 +193,7 @@ int main()
         string cmd = "mkdir ..\\sorted";
         system(cmd.c_str());
     }
-    for (int f = 0; f <= countFile; f++)
+    for (int f = 0; f < countFile; f++)
     {
         cout << " Sorting file " << f << "\r";
         vector<Review> review;
