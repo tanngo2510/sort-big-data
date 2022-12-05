@@ -222,7 +222,7 @@ void SortFile(int count)
         }
         OutFile.close();
     }
-    string cmd = "del ..\\output";
+    string cmd = "rmdir /s /q ..\\output";
     system(cmd.c_str());
 }
 
