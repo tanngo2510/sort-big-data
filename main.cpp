@@ -5,7 +5,7 @@
 #include <sstream>
 #include <sys/stat.h>
 
-#define PATH_CSV_TEST "..\\test.csv"
+#define PATH_CSV_TEST "test.csv"
 #define PATH_CSV "..\\Books_rating.csv"
 #define SIZE 10000
 
