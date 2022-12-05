@@ -31,3 +31,6 @@
 *.out
 *.app
 Books_rating.csv
+bin/*
+output/*
+sorted/*
