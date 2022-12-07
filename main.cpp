@@ -14,7 +14,8 @@ using namespace std;
 class Review
 {
 private:
-    string line;
+    int index;
+    string data;
     string id;
     // string title;
     // string price;
@@ -27,10 +28,11 @@ private:
     // string reviewText;
 
 public:
-    Review(string text)
+    Review(string data, int index)
     {
-        this->line = text;
-        stringstream ss(text);
+        this->data = data;
+        this->index = index;
+        stringstream ss(data);
         string token;
         vector<string> tokens;
         while (getline(ss, token, ','))
@@ -52,9 +54,13 @@ public:
     {
         return id;
     }
-    string GetLine()
+    string GetData()
     {
-        return this->line;
+        return this->data;
+    }
+    int GetIndex()
+    {
+        return this->index;
     }
 };
 
@@ -82,7 +88,7 @@ int SplitFile(string path)
     string header;
     string line;
     int count = 0;
-    int fileCount = 1;
+    int fileCount = 0;
     if (!isDirExist("..\\output"))
     {
         string cmd = "mkdir ..\\output";
@@ -118,7 +124,7 @@ int SplitFile(string path)
     }
     OutFile.close();
     InFile.close();
-    return countFile;
+    return ++countFile;
 }
 
 void Merge(vector<Review> &review, int left, int right)
@@ -191,9 +197,9 @@ void SortFile(int count)
         string cmd = "mkdir ..\\sorted";
         system(cmd.c_str());
     }
-    for (int f = 1; f <= count; f++)
+    for (int f = 0; f < count; f++)
     {
-        cout << " Sorting file " << f << "\r";
+        cout << "Sorting file " << f << "\r";
         vector<Review> review;
         fstream InFile;
         InFile.open("..\\output\\file" + to_string(f) + ".csv", ios_base::in | ios_base::binary);
@@ -205,7 +211,7 @@ void SortFile(int count)
         string line;
         while (getline(InFile, line))
         {
-            review.push_back(Review(line));
+            review.push_back(Review(line, f));
         }
         InFile.close();
         MergeSort(review, 0, review.size() - 1);
@@ -218,7 +224,7 @@ void SortFile(int count)
         }
         for (int i = 0; i < review.size(); i++)
         {
-            OutFile << review.at(i).GetLine() << endl;
+            OutFile << review.at(i).GetData() << endl;
         }
         OutFile.close();
     }
@@ -226,47 +232,70 @@ void SortFile(int count)
     system(cmd.c_str());
 }
 
-// class MergeClass
-// {
-// private:
-//     string filename;
-//     Review *review;
+string getFirstDataInFile(int indexFile)
+{
+    string filePath = "..\\sorted\\file" + to_string(indexFile) + ".csv";
+    fstream file;
+    string line, firstLine;
+    vector<string> data;
 
-// public:
-//     MergeClass(string filename)
-//     {
-//         this->filename = filename;
-//         fstream file;
-//         file.open(filename, ios_base::in | ios_base::binary);
-//         if (!file.is_open())
-//         {
-//             cout << "Error opening file" << endl;
-//             exit(1);
-//         }
-//         string line;
-//         getline(file, line);
-//         this->review = new Review(line);
-//     }
-//     string getId()
-//     {
-//         return review->GetId();
-//     }
-// };
+    file.open(filePath, ios_base::in | ios_base::binary);
+    getline(file, firstLine);
+    while (getline(file, line))
+    {
+        data.push_back(line);
+    }
+    file.close();
+    file.open(filePath, ios_base::out | ios_base::binary);
+    for (int i = 0; i < data.size(); i++)
+    {
+        file << data.at(i) << endl;
+    }
+    file.close();
+    return firstLine;
+}
 
-// void combine(int count){
-//     vector<MergeClass> m;
-//     for (int i = 1; i <= count; i++)
-//     {
-//         m.push_back(MergeClass("..\\sorted\\file" + to_string(i) + ".csv"));
-//     }
-//     MergeClass min = m.front();
-
-// }
+void MergeFile(int count)
+{
+    if (count <= 0)
+        return;
+    vector<Review> compare_list;
+    string line = "";
+    Review *min;
+    int f = 0;
+    for (int i = 0; i < count; i++)
+    {
+        line = getFirstDataInFile(i);
+        compare_list.push_back(Review(line, i));
+    }
+    cout << "\n";
+    fstream outFile;
+    outFile.open("..\\result.csv", ios_base::out | ios_base::app | ios_base::binary);
+    while (f <= 1000)
+    {
+        cout << "F: " << f << "\r";
+        min = &compare_list.at(0);
+        for (int i = 0; i < compare_list.size(); i++)
+        {
+            if (min->GetId().compare(compare_list.at(i).GetId()) > 0)
+            {
+                min = &compare_list.at(i);
+            }
+        }
+        outFile << min->GetData() << endl;
+        int index = min->GetIndex();
+        line = getFirstDataInFile(index);
+        compare_list.at(index) = Review(line, index);
+        f++;
+    }
+    outFile.close();
+}
 
 int main()
 {
     int count = SplitFile(PATH_CSV_TEST);
     cout << "Number of file: " << count << endl;
     SortFile(count);
+    MergeFile(count);
     return 0;
 }

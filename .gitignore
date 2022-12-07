@@ -30,6 +30,7 @@
 *.exe
 *.out
 *.app
+*.csv
 
 Books_rating.csv
 test.csv
