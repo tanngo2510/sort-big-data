@@ -7,8 +7,8 @@
 # Cấu trúc thư mục:
   📦[sort-big-data](https://github.com/tanngo2510/sort-big-data)\
    ┣ 📂[docs](https://github.com/tanngo2510/sort-big-data/tree/master/docs)\
-   ┃  ┣ 📜 report.docx\
-   ┃  ┗ 📜 report.pdf\
+   ┃  ┣ 📜 [report.docx](https://github.com/tanngo2510/sort-big-data/blob/master/docs/report.docx)\
+   ┃  ┗ 📜 [report.pdf](https://github.com/tanngo2510/sort-big-data/blob/master/docs/report.pdf)\
    ┣ 📂[src](https://github.com/tanngo2510/sort-big-data/tree/master/src)\
    ┃  ┣ 📂[Sort Big Data](https://github.com/tanngo2510/sort-big-data/tree/master/src/Sort%20Big%20Data)\
    ┃     ┣ 📜 [main.cpp](https://github.com/tanngo2510/sort-big-data/blob/master/src/Sort%20Big%20Data/main.cpp)\
