@@ -5,8 +5,8 @@
 #include <sstream>
 #include <sys/stat.h>
 
-#define PATH_CSV_TEST "..\\test.csv"
-#define PATH_CSV "..\\Books_rating.csv"
+#define PATH_CSV_TEST "test.csv"
+#define PATH_CSV " Books_rating.csv"
 #define SIZE 10000
 
 using namespace std;
@@ -83,12 +83,12 @@ int SplitFile(string path)
     string line;
     int count = 0;
     int fileCount = 1;
-    if (!isDirExist("..\\output"))
+    if (!isDirExist("output"))
     {
-        string cmd = "mkdir ..\\output";
+        string cmd = "mkdir  output";
         system(cmd.c_str());
     }
-    string fileName = "..\\output\\file" + to_string(fileCount) + ".csv";
+    string fileName = "output\\file" + to_string(fileCount) + ".csv";
     fstream OutFile;
     OutFile.open(fileName, ios_base::out | ios_base::binary);
     if (!OutFile.is_open())
@@ -104,7 +104,7 @@ int SplitFile(string path)
             countFile++;
             OutFile.close();
             fileCount++;
-            fileName = "..\\output\\file" + to_string(fileCount) + ".csv";
+            fileName = "output\\file" + to_string(fileCount) + ".csv";
             OutFile.open(fileName, ios_base::out | ios_base::binary);
             if (!OutFile.is_open())
             {
@@ -118,7 +118,9 @@ int SplitFile(string path)
     }
     OutFile.close();
     InFile.close();
-    return countFile;
+    cout << countFile <<"\n";
+
+    return ++countFile;
 }
 
 void Merge(vector<Review> &review, int left, int right)
@@ -184,11 +186,11 @@ void MergeSort(vector<Review> &review, int left, int right)
     Merge(review, left, right);
 }
 
-void SortFile(int count)
+int SortFile(int count)
 {
-    if (!isDirExist("..\\sorted"))
+    if (!isDirExist("sorted"))
     {
-        string cmd = "mkdir ..\\sorted";
+        string cmd = "mkdir sorted";
         system(cmd.c_str());
     }
     for (int f = 1; f <= count; f++)
@@ -196,7 +198,7 @@ void SortFile(int count)
         cout << " Sorting file " << f << "\r";
         vector<Review> review;
         fstream InFile;
-        InFile.open("..\\output\\file" + to_string(f) + ".csv", ios_base::in | ios_base::binary);
+        InFile.open("output\\file" + to_string(f) + ".csv", ios_base::in | ios_base::binary);
         if (!InFile.is_open())
         {
             cout << "Error opening InFile" << endl;
@@ -210,7 +212,7 @@ void SortFile(int count)
         InFile.close();
         MergeSort(review, 0, review.size() - 1);
         fstream OutFile;
-        OutFile.open("..\\sorted\\file" + to_string(f) + ".csv", ios_base::out | ios_base::binary);
+        OutFile.open("sorted\\file" + to_string(f) + ".csv", ios_base::out | ios_base::binary);
         if (!OutFile.is_open())
         {
             cout << "Error opening OutFile" << endl;
@@ -222,51 +224,91 @@ void SortFile(int count)
         }
         OutFile.close();
     }
-    string cmd = "rmdir /s /q ..\\output";
+    // string cmd = "del output";
+    // system(cmd.c_str());
+    return count++;
+}
+vector<Review> read_csv(string path)
+{
+    // read file.csv and return a vector of Review obj
+    vector<Review> R;
+    string line;
+    fstream inFile;
+    inFile.open(path, ios::in | ios::binary);
+    while (getline(inFile, line))
+    {
+        R.push_back(Review(line));
+    }
+    inFile.close();
+    return R;
+}
+Review pop_first(vector<Review> &R)
+{
+    Review review = R.front();
+    if (R.size() == 1)
+    {
+        R.pop_back();
+    }
+    else
+        R.erase(R.begin());
+    return review;
+}
+void deleteFile(string path)
+{
+    string cmd = "del " + path;
     system(cmd.c_str());
 }
-
-// class MergeClass
-// {
-// private:
-//     string filename;
-//     Review *review;
-
-// public:
-//     MergeClass(string filename)
-//     {
-//         this->filename = filename;
-//         fstream file;
-//         file.open(filename, ios_base::in | ios_base::binary);
-//         if (!file.is_open())
-//         {
-//             cout << "Error opening file" << endl;
-//             exit(1);
-//         }
-//         string line;
-//         getline(file, line);
-//         this->review = new Review(line);
-//     }
-//     string getId()
-//     {
-//         return review->GetId();
-//     }
-// };
-
-// void combine(int count){
-//     vector<MergeClass> m;
-//     for (int i = 1; i <= count; i++)
-//     {
-//         m.push_back(MergeClass("..\\sorted\\file" + to_string(i) + ".csv"));
-//     }
-//     MergeClass min = m.front();
-
-// }
+string MergeSortedFile(string folderPath, string path1, string path2)
+{
+    // Merge 2 file.csv and return a string "fname.csv"
+    string sortedPath =folderPath + "output.csv";
+    vector<Review> R1 = read_csv(folderPath + path1);
+    vector<Review> R2 = read_csv(folderPath + path2);
+    deleteFile(folderPath + path1);
+    deleteFile(folderPath + path2);
+    ofstream ofs(sortedPath);
+    while (!R1.empty() && !R2.empty())
+    {
+        if (R1.front().GetId().compare(R2.front().GetId()) <= 0)
+        {
+            ofs << pop_first(R1).GetLine();
+        }
+        else
+            ofs << pop_first(R2).GetLine();
+    }
+    if (R1.empty() && !R2.empty())
+    {
+        for (int i = 0; i < R2.size(); i++)
+        {
+            ofs << R2[i].GetLine();
+        }
+    }
+    if (R2.empty() && !R1.empty())
+    {
+        for (int i = 0; i < R1.size(); i++)
+        {
+            ofs << R1[i].GetLine();
+        }
+    }
+    ofs.close();
+    return sortedPath;
+}
+int count =0;
+void MergeSortedFile(string path1, string path2)
+{
+    MergeSortedFile(".\\sorted\\", path1, path2);
+}
+void MergeAll()
+{
+    int count =SortFile(SplitFile(PATH_CSV_TEST));
+    for (int i = 1; i <=count +1; i++)
+    {
+        MergeSortedFile("output.csv","file"+to_string(i)+".csv");
+    }
+}
 
 int main()
 {
-    int count = SplitFile(PATH_CSV_TEST);
-    cout << "Number of file: " << count << endl;
-    SortFile(count);
+    MergeAll();
     return 0;
 }
