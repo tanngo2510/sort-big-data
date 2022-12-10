@@ -19,6 +19,6 @@
    ┃  ┃  ┣ 📜 [file_controller.h](https://github.com/tanngo2510/sort-big-data/blob/master/src/Sort%20Big%20Data/file_controller.h)\
    ┃  ┃  ┣ 📜 [file_controller.cpp](https://github.com/tanngo2510/sort-big-data/blob/master/src/Sort%20Big%20Data/file_controller.cpp)\
    ┃  ┃  ┗ 📜 [...](https://github.com/tanngo2510/sort-big-data/tree/master/src/Sort%20Big%20Data)\
-   ┃  ┗ 📜 [Books_rating.csv](https://github.com/tanngo2510/sort-big-data/releases)
+   ┃  ┗ 📜 [Books_rating.csv](https://github.com/tanngo2510/sort-big-data/releases)\
    ┣ 📜 [.gitignore](https://github.com/tanngo2510/opencv-face-recognition-python3/blob/master/.gitignore)\
    ┗ 📜 [README.md](https://github.com/tanngo2510/opencv-face-recognition-python3/blob/master/README.md)
